@@ -1,3 +1,7 @@
-from django.shortcuts import render
+from django.views import generic
 
-# Create your views here.
+
+class TestView(generic.TemplateView):
+    """Generates a webhook after the end of the webinar on bison"""
+
+    template_name = "menu/general.html"

@@ -1,73 +1,47 @@
-import re
-
 from django import template
-from django.http import HttpRequest
-from django.template import RequestContext
-from django.urls import reverse, NoReverseMatch
 
 from ..models import TreeMenu
+
 
 register = template.Library()
 
 
+def recurs_find(tree_menu, pk, result_menu, pre_pk=None):
+    mid_menu = []
+    del_list = []
+    new_pk = None
+    for index in range(len(tree_menu)):
+        if tree_menu[index]["parent"] == int(pk):
+            mid_menu.append(tree_menu[index])
+            del_list.addend(index)
+
+        if tree_menu[index]["id"] == int(pk):
+            new_pk = tree_menu[index]["parent"]
+
+    result_menu.insert(0, (mid_menu, pre_pk))
+    if new_pk:
+        for item in del_list:
+            tree_menu.pop(item)
+        return recurs_find(tree_menu, new_pk, result_menu=result_menu, pre_pk=pk)
+    return result_menu
+
+
 @register.inclusion_tag('menu/menu.html', takes_context=True)
 def draw_menu(context, name_menu):
-    menu_data = context['request']["GET"].get("name_menu", "")
-    pk = context['request']["GET"].get("pk", "")
+    if type(name_menu) is list:
+        noda = name_menu[1][1]
+        return {'tree_menu': name_menu[1:],
+                'signature_node': noda}
 
-    if menu_data != name_menu:
-        tree_menu = TreeMenu.objects.filter(nemu=name_menu)
-        return {'tree_menu': tree_menu,
+    menu_data = context['request'].GET.get("name_menu", "")
+    pk = context['request'].GET.get("pk", None)
+
+    if menu_data != name_menu or pk is None:
+        tree_menu = TreeMenu.objects.filter(menu=name_menu, parent=None)
+        return {'tree_menu': [(tree_menu, None)],
                 'signature_node': None}
 
-
-
-
-
-
-
-    if parent != 0 and 'menu' in context:
-        menu = context['menu']
-    else:
-
-        is_url = re.compile(r'^http[s]?://')
-
-        # Get path if request exist
-        current_path = context['request'].path \
-            if 'request' in context and isinstance(context['request'], HttpRequest) \
-            else ''
-
-        data = TreeMenu.objects.select_related()\
-            .filter(category__name=name)\
-            .order_by('pk')
-
-        menu = []
-
-        for item in data:
-
-            path = item.path.strip()
-
-            target = '_self'
-
-            if is_url.match(path):
-                url = path
-                target = '_blank'
-            else:
-                try:
-                    url = reverse(path)
-                except NoReverseMatch:
-                    url = path
-
-            menu.append({
-                'id': item.pk,
-                'url': url,
-                'target': target,
-                'name': item.name,
-                'parent': item.parent_id or 0,
-                'active': True if url == current_path else False,
-            })
-
-    return {
-        'menu': menu,
-        'current_menu': (item for item in menu if 'parent' in item and item['parent'] == parent),
-    }
+    tree_menu = TreeMenu.objects.all().values()
+    result_menu = recurs_find(tree_menu, pk, [])
+    return {'tree_menu': result_menu,
+            'signature_node': result_menu[0][1]}

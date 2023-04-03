@@ -1,10 +1,15 @@
-{% load menu_tags %}
+{% load logic_menu %}
 {% load static %}
-{% if menu_tree.0.menu_name %}
-<p>{{menu_tree.0.menu_name}}</p>
-{% endif %}
-<ul>
-    {% autoescape off %}
-    {% render_menu menu_tree %}
-    {% endautoescape %}
-</ul>
+
+{% for tree in tree_menu.0.0 %}
+    <li>
+        <a href="{{ tree.get_absolute_url }}">
+            {{ tree.name_tree }}
+            {% if tree.id == signature_node %}
+                <lu>
+                {% draw_menu tree_menu.0 %}
+                </lu>
+            {% endif %}
+        </a>
+    </li>
+{% endfor %}

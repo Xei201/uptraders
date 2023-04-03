@@ -8,7 +8,7 @@ class Menu(models.Model):
                                  max_length=255)
 
     class Meta:
-        ordering = ["pk"]
+        ordering = ["name_menu"]
 
     def __str__(self):
         return self.name_menu
@@ -24,6 +24,7 @@ class TreeMenu(models.Model):
     parent = models.ForeignKey('self',
                                verbose_name='Parent',
                                on_delete=models.CASCADE,
+                               blank=True,
                                default=None,
                                null=True)
 
@@ -32,8 +33,7 @@ class TreeMenu(models.Model):
 
     # Добавить относительный адрес
     def get_absolute_url(self):
-        return reverse('menu') + f'?menu={str(self.menu)}&pk={str(self.pk)}'
-
+        return reverse('general') + f'?menu={str(self.menu)}&pk={str(self.pk)}'
 
     def get_menu(self):
         # Возвращает номер меню на основе данных родителя
