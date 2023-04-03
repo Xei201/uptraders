@@ -1,0 +1,6 @@
+/venv/
+/.idea/
+/uptrader/deploy/
+/uptrader/uptrader/settings.ini
+/uptrader/menu/migrations/
+/uptrader/db.sqlite3
