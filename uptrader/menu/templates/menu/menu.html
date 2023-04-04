@@ -2,13 +2,13 @@
 {% load static %}
 
 {% for tree in tree_menu.0.0 %}
-    <li>
+    <li class="list-group-item list-group-item-action">
         <a href="{{ tree.get_absolute_url }}">
             {{ tree.name_tree }}
             {% if tree.id == signature_node %}
-                <lu>
+                <ol class="list-group list-group-flush">
                 {% draw_menu tree_menu %}
-                </lu>
+                </ol>
             {% endif %}
         </a>
     </li>

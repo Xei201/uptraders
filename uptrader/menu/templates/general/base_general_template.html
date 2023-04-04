@@ -18,8 +18,19 @@
 </head>
 
 <body>
-<lu>
-{% draw_menu 'main' %}
-</lu>
+<div class="col-sm-2">
+  <h3> Меню 1 </h3>
+  <ol class="list-group list-group-flush">
+  {% draw_menu 'main' %}
+  </ol>
+</div>
+
+<div class="col-sm-2">
+    <h3> Меню 2 </h3>
+  <ol class="list-group list-group-flush">
+  {% draw_menu 'Test1' %}
+  </ol>
+</div>
+
 </body>
 </html>

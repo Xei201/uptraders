@@ -42,7 +42,7 @@ class TreeMenu(models.Model):
     def save(self, *args, **kwargs):
         """
         Устанавливает в поле меню детелей параметры из
-        родителя для корректной рабоыт отображжения меню
+        родителя для корректной работы отображжения меню
         """
         if self.parent:
             self.menu = self.parent.menu
