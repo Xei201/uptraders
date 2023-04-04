@@ -31,13 +31,8 @@ class TreeMenu(models.Model):
     class Meta:
         ordering = ["pk"]
 
-    # Добавить относительный адрес
     def get_absolute_url(self):
         return reverse('general') + f'?menu={str(self.menu)}&pk={str(self.pk)}'
-
-    def get_menu(self):
-        # Возвращает номер меню на основе данных родителя
-        pass
 
     def __str__(self):
         return self.name_tree

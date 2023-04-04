@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    {% load logic_menu %}
-    <meta charset="UTF-8">
-    <title>Menu Item</title>
-</head>
-<body>
-{% draw_menu 'main' %}
-</body>
-</html>
+{% extends "base_general_template.html" %}
+
+{% block title %} Test Menu {% endblock %}
+
+{% block content %}
+<h1>Test Menu</h1>
+{% endblock %}

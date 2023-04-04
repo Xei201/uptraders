@@ -1,10 +1,15 @@
 from pathlib import Path
+import configparser
+
+
+config = configparser.ConfigParser()
+config.read("uptrader/settings.ini")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-ct8lb7b@7$%6z@a!qkz9+4+uns%xk6$f$aldmqn!2&jfs5jdok'
+SECRET_KEY = config.get("uptrader", "secret_key")
 
-DEBUG = True
+DEBUG = config["uptrader"].get("debug", False)
 
 ALLOWED_HOSTS = []
 
@@ -17,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'menu.apps.MenuConfig',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -27,6 +33,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+
+INTERNAL_IPS = [
+    '127.0.0.1',
 ]
 
 ROOT_URLCONF = 'uptrader.urls'
@@ -87,3 +98,5 @@ STATIC_URL = 'static/'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
