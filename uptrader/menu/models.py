@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from urllib.parse import urlencode
 
 
 class Menu(models.Model):
@@ -37,7 +38,9 @@ class TreeMenu(models.Model):
 
     def get_absolute_url(self):
         """Возвращает ссылки на разделы меню с параметрами"""
-        return reverse('general') + f'?menu={str(self.menu)}&pk={str(self.pk)}'
+        params = {"menu": str(self.menu),
+                  "pk": str(self.pk)}
+        return reverse('general') + '?' + urlencode(params)
 
     def save(self, *args, **kwargs):
         """
